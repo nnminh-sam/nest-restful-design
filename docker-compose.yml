@@ -1,0 +1,47 @@
+services:
+  # app:
+  #   container_name: neo-note-taker-prototype-app
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     target: production
+  #   ports:
+  #     - '${PORT}:3000'
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - redis
+  #   networks:
+  #     - neo-note-taker-network
+
+  redis:
+    container_name: neo-note-taker-prototype-redis
+    image: redis:8.0-M02-alpine
+    ports:
+      - '${REDIS_PORT}:6379'
+    env_file:
+      - .env
+    volumes:
+      - ./docker-volumes/redis:/data/db
+    # networks:
+    #   - neo-note-taker-network
+
+  postgres:
+    container_name: neo-note-taker-prototype-postgres
+    image: postgres:16-alpine
+    ports:
+      - '${POSTGRES_PORT}:5432'
+    env_file:
+      - .env
+    volumes:
+      - ./docker-volumes/postgres:/var/lib/postgresql/data
+    # networks:
+    #   - neo-note-taker-network
+
+# networks:
+#   neo-note-taker-network:
+#     driver: bridge
+
+volumes:
+  redis-data:
+  postgres-data:
