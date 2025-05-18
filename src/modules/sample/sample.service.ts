@@ -4,6 +4,7 @@ import { UpdateSampleDto } from './dto/update-sample.dto';
 import { Sample } from 'src/models/sample.model';
 import { PaginationDto } from 'src/common/dtos/pagination-response.dto';
 import { ResponseDto } from 'src/common/dtos/response.dto';
+import { FilterSampleDto } from 'src/modules/sample/dto/filter-sample.dto';
 
 @Injectable()
 export class SampleService {
@@ -17,7 +18,7 @@ export class SampleService {
     return data;
   }
 
-  findAll() {
+  findAll(filter: FilterSampleDto) {
     const data: Sample[] = [
       {
         str: 'Data 1',
@@ -38,6 +39,7 @@ export class SampleService {
         arr: ['1', '2', '3'],
       },
     ];
+
     const pagination: PaginationDto = {
       total: 3,
       page: 1,
@@ -63,6 +65,10 @@ export class SampleService {
       num: 1210,
       bool: true,
       arr: ['1', '2', '3'],
+    };
+    const updateData: UpdateSampleDto = {
+      str: '10',
+      num: 1210,
     };
     return data;
   }

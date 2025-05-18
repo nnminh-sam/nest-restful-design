@@ -20,24 +20,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
 
     const errorResponse: any = exception.getResponse();
-    const message =
-      typeof errorResponse === 'string'
-        ? errorResponse
-        : (errorResponse as any).message || 'Internal server error';
+    const message: string = errorResponse?.message || 'Internal Server Error';
+    const error: string = errorResponse?.error || message;
 
-    this.logger.error(
-      `${request.method} ${request.url} - ${status} - ${message}`,
-      exception.stack,
-    );
+    this.logger.error(`${request.method} ${request.url} - ${status}`);
+    this.logger.error('Error details:', errorResponse?.details);
+    this.logger.error(exception.stack);
 
-    // TODO(dev: nnminh): Review error details structure [LOW]
     const body: HttpErrorResponseDto = {
       path: request.path,
       timestamp: new Date().toISOString(),
       statusCode: status,
       message,
-      error: errorResponse.error,
-      ...(typeof errorResponse === 'object' && { details: errorResponse }),
+      error,
+      ...(errorResponse?.details && { details: errorResponse.details }),
     };
     response.status(status).json(body);
   }
