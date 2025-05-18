@@ -1,4 +1,8 @@
-# Neo-notetaker Webapp Prototype
+# NestJS RESTful API Designs Playground
+
+---
+
+> *This project is my practice playground for fast and effective designing RESTful API with NestJS.*
 
 ---
 
@@ -53,18 +57,5 @@ src
 ├── main.ts
 ├── models
 ├── modules
-│   ├── bot
-│   │   ├── bot.controller.ts
-│   │   ├── bot.module.ts
-│   │   ├── bot.service.ts
-│   │   └── dtos
-│   │       └── create-bot.dto.ts
-│   └── sample
-│       ├── dto
-│       │   ├── create-sample.dto.ts
-│       │   └── update-sample.dto.ts
-│       ├── sample.controller.ts
-│       ├── sample.module.ts
-│       └── sample.service.ts
 └── utils
 ```
