@@ -7,13 +7,19 @@ import { DomainEnum } from 'src/configs';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { GlobalValidationPipe } from './common/pipes/global-validation.pipe';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const appConfig: IAppConfig[DomainEnum.APP] = app
     .get(ConfigService)
     .get<IAppConfig[DomainEnum.APP]>(DomainEnum.APP);
+
+  app.enableCors();
+
+  app.useStaticAssets(join(__dirname, '..', 'public'));
 
   app.setGlobalPrefix(appConfig.apiPrefix);
   app.enableVersioning({

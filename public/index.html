@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Google Meet URL Sender</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+      }
+      input[type='url'] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      button {
+        background-color: #4285f4;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+      }
+      button:hover {
+        background-color: #357abd;
+      }
+      #response {
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 4px;
+        display: none;
+      }
+      .success {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      .error {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Google Meet URL Sender</h1>
+      <form id="meetForm">
+        <div class="form-group">
+          <label for="meetUrl">Enter Google Meet URL:</label>
+          <input
+            type="url"
+            id="meetUrl"
+            name="meetUrl"
+            required
+            placeholder="https://meet.google.com/xxx-xxxx-xxx"
+          />
+        </div>
+        <button type="submit">Send URL</button>
+      </form>
+      <div id="response"></div>
+    </div>
+
+    <script>
+      document
+        .getElementById('meetForm')
+        .addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const meetUrl = document.getElementById('meetUrl').value;
+          const responseDiv = document.getElementById('response');
+
+          try {
+            const response = await fetch('/api/samples', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ meetUrl }),
+            });
+
+            const data = await response.json();
+            responseDiv.style.display = 'block';
+
+            if (response.ok) {
+              responseDiv.className = 'success';
+              responseDiv.textContent = 'URL sent successfully!';
+            } else {
+              responseDiv.className = 'error';
+              responseDiv.textContent = data.message || 'Error sending URL';
+            }
+          } catch (error) {
+            responseDiv.style.display = 'block';
+            responseDiv.className = 'error';
+            responseDiv.textContent = 'Error connecting to server';
+          }
+        });
+    </script>
+  </body>
+</html>
