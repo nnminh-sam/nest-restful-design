@@ -11,6 +11,14 @@ export class PaymentRepository {
 
   constructor(private readonly environmentService: EnvironmentService) {
     this.logger.log('Square Client Initialized');
+    console.log(
+      'Access token: ',
+      this.environmentService.use('SQUARE_ACCESS_TOKEN'),
+    );
+    console.log(
+      'environment:',
+      this.environmentService.use('SQUARE_ENVIRONMENT'),
+    );
     this.squareClient = new Client({
       environment: this.environmentService.use('SQUARE_ENVIRONMENT'),
       accessToken: this.environmentService.use('SQUARE_ACCESS_TOKEN'),
