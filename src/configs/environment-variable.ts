@@ -38,6 +38,22 @@ export class EnvironmentVarialbes {
   @IsString()
   @IsOptional()
   REFRESH_TOKEN_EXPIRES_IN: string = '1d';
+
+  @IsString()
+  @IsNotEmpty()
+  SQUARE_APPLICATION_ID: string;
+
+  @IsString()
+  @IsNotEmpty()
+  SQUARE_ACCESS_TOKEN: string;
+
+  @IsString()
+  @IsNotEmpty()
+  SQUARE_LOCATION_ID: string;
+
+  @IsString()
+  @IsNotEmpty()
+  SQUARE_ENVIRONMENT: string;
 }
 
 export type EnvKey = keyof EnvironmentVarialbes;

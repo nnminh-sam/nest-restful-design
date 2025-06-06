@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Square Payment Form</title>
+    <script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+          Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+      }
+      .payment-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .payment-title {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #2d3748;
+      }
+      .payment-title h1 {
+        font-size: 24px;
+        margin: 0 0 10px 0;
+      }
+      .payment-title p {
+        color: #718096;
+        margin: 0;
+        font-size: 16px;
+      }
+      #payment-form {
+        width: 100%;
+      }
+      #card-container {
+        margin: 20px 0;
+        min-height: 100px;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+        padding: 10px;
+        background: #fff;
+        width: 100%;
+      }
+      #card-button {
+        background-color: #006aff;
+        color: white;
+        border: none;
+        padding: 14px 24px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+        font-weight: 600;
+        transition: background-color 0.2s ease;
+      }
+      #card-button:hover {
+        background-color: #0052cc;
+      }
+      #card-button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+      #payment-status-container {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 4px;
+        display: none;
+        text-align: center;
+        font-weight: 500;
+      }
+      .is-success {
+        background-color: #d4edda;
+        color: #155724;
+        display: block !important;
+      }
+      .is-failure {
+        background-color: #f8d7da;
+        color: #721c24;
+        display: block !important;
+      }
+      .form-group {
+        margin-bottom: 20px;
+        width: 100%;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #4a5568;
+      }
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: border-color 0.2s ease;
+        background-color: #fff;
+      }
+      .form-group input:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #006aff;
+        box-shadow: 0 0 0 3px rgba(0, 106, 255, 0.1);
+      }
+      .form-group input::placeholder {
+        color: #a0aec0;
+      }
+      .form-row {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        width: 100%;
+      }
+      .form-row .form-group {
+        flex: 1;
+        margin-bottom: 0;
+        min-width: 0; /* This prevents flex items from overflowing */
+      }
+      .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2d3748;
+        margin: 30px 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e2e8f0;
+      }
+      @media (max-width: 640px) {
+        .payment-container {
+          margin: 20px auto;
+          padding: 20px;
+        }
+        .form-row {
+          flex-direction: column;
+          gap: 0;
+        }
+        .form-row .form-group {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="payment-container">
+      <div class="payment-title">
+        <h1>Complete Your Purchase</h1>
+        <p>Please fill in your billing information below</p>
+      </div>
+
+      <form id="payment-form">
+        <div class="section-title">Billing Information</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="givenName">First Name</label>
+            <input
+              type="text"
+              id="givenName"
+              required
+              placeholder="Enter your first name"
+              value="Nguyễn"
+            />
+          </div>
+          <div class="form-group">
+            <label for="familyName">Last Name</label>
+            <input
+              type="text"
+              id="familyName"
+              required
+              placeholder="Enter your last name"
+              value="Nhật Minh"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            required
+            placeholder="Enter your email address"
+            value="nnminh.sam.1803@gmail.com"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input
+            type="tel"
+            id="phone"
+            required
+            placeholder="Enter your phone number"
+            value="0704093899"
+          />
+        </div>
+
+        <div class="section-title">Shipping Address</div>
+        <div class="form-group">
+          <label for="addressLine1">Address Line 1</label>
+          <input
+            type="text"
+            id="addressLine1"
+            required
+            placeholder="Enter street address"
+            value="691 Lê Văn Việt"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="addressLine2">Address Line 2 (Optional)</label>
+          <input
+            type="text"
+            id="addressLine2"
+            placeholder="Apartment, suite, unit, etc."
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City</label>
+            <input
+              type="text"
+              id="city"
+              required
+              placeholder="Enter city"
+              value="Thủ Đức"
+            />
+          </div>
+          <div class="form-group">
+            <label for="state">State</label>
+            <input
+              type="text"
+              id="state"
+              required
+              placeholder="Enter state"
+              value="Hồ Chí Minh City"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="countryCode">Country</label>
+          <select id="countryCode" required>
+            <option value="">Select a country</option>
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+            <option value="GB">United Kingdom</option>
+            <option value="AU" selected>Australia</option>
+          </select>
+        </div>
+
+        <div class="section-title">Payment Information</div>
+        <div id="card-container"></div>
+        <button id="card-button" type="button">Pay $1.00</button>
+      </form>
+      <div id="payment-status-container"></div>
+    </div>
+
+    <script>
+      // Configuration
+      const config = {
+        appId: 'sandbox-sq0idb-O_vPAd-9_hbCOIESDIg5NA',
+        locationId: 'LMDPXWN6083XE',
+        amount: '1.00',
+        currency: 'USD',
+      };
+
+      function getBillingContact() {
+        return {
+          givenName: document.getElementById('givenName').value,
+          familyName: document.getElementById('familyName').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          addressLines: [
+            document.getElementById('addressLine1').value,
+            document.getElementById('addressLine2').value,
+          ].filter((line) => line.trim() !== ''),
+          city: document.getElementById('city').value,
+          state: document.getElementById('state').value,
+          countryCode: document.getElementById('countryCode').value,
+        };
+      }
+
+      async function initializeCard(payments) {
+        const card = await payments.card();
+        await card.attach('#card-container');
+        return card;
+      }
+
+      async function createPayment(token) {
+        const body = JSON.stringify({
+          locationId: config.locationId,
+          sourceId: token,
+          idempotencyKey: window.crypto.randomUUID(),
+        });
+
+        const paymentResponse = await fetch('/api/v1/payments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body,
+        });
+        console.log('🚀 ~ createPayment ~ paymentResponse:', paymentResponse);
+
+        if (paymentResponse.ok) {
+          return paymentResponse.json();
+        }
+
+        const errorBody = await paymentResponse.text();
+        throw new Error(errorBody);
+      }
+
+      async function tokenize(card) {
+        const verificationDetails = {
+          amount: config.amount,
+          billingContact: getBillingContact(),
+          currencyCode: config.currency,
+          intent: 'CHARGE',
+          customerInitiated: true,
+          sellerKeyedIn: false,
+        };
+
+        const tokenResult = await card.tokenize(verificationDetails);
+        if (tokenResult.status === 'OK') {
+          return tokenResult.token;
+        } else {
+          let errorMessage = `Tokenization failed-status: ${tokenResult.status}`;
+          if (tokenResult.errors) {
+            errorMessage += ` and errors: ${JSON.stringify(tokenResult.errors)}`;
+          }
+          throw new Error(errorMessage);
+        }
+      }
+
+      function displayPaymentResults(status) {
+        const statusContainer = document.getElementById(
+          'payment-status-container',
+        );
+        if (status === 'SUCCESS') {
+          statusContainer.classList.remove('is-failure');
+          statusContainer.classList.add('is-success');
+          statusContainer.textContent = 'Payment successful!';
+        } else {
+          statusContainer.classList.remove('is-success');
+          statusContainer.classList.add('is-failure');
+          statusContainer.textContent = 'Payment failed. Please try again.';
+        }
+      }
+
+      // Initialize the payment form
+      document.addEventListener('DOMContentLoaded', async function () {
+        if (!window.Square) {
+          throw new Error('Square.js failed to load properly');
+        }
+
+        let payments;
+        try {
+          payments = window.Square.payments(config.appId, config.locationId);
+        } catch (e) {
+          displayPaymentResults('FAILURE');
+          return;
+        }
+
+        let card;
+        try {
+          card = await initializeCard(payments);
+        } catch (e) {
+          console.error('Initializing Card failed', e);
+          return;
+        }
+
+        const cardButton = document.getElementById('card-button');
+        cardButton.addEventListener('click', async function (event) {
+          event.preventDefault();
+
+          // Validate form
+          const form = document.getElementById('payment-form');
+          if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+          }
+
+          try {
+            cardButton.disabled = true;
+            const token = await tokenize(card);
+            const paymentResults = await createPayment(token);
+            console.log('🚀 ~ paymentResults:', paymentResults);
+            displayPaymentResults('SUCCESS');
+            console.debug('Payment Success', paymentResults);
+          } catch (e) {
+            console.log('🚀 ~ Payment error:', e);
+            cardButton.disabled = false;
+            displayPaymentResults('FAILURE');
+            console.error(e.message);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
