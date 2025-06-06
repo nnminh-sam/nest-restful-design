@@ -11,14 +11,6 @@ export class PaymentRepository {
 
   constructor(private readonly environmentService: EnvironmentService) {
     this.logger.log('Square Client Initialized');
-    console.log(
-      'Access token: ',
-      this.environmentService.use('SQUARE_ACCESS_TOKEN'),
-    );
-    console.log(
-      'environment:',
-      this.environmentService.use('SQUARE_ENVIRONMENT'),
-    );
     this.squareClient = new Client({
       environment: this.environmentService.use('SQUARE_ENVIRONMENT'),
       accessToken: this.environmentService.use('SQUARE_ACCESS_TOKEN'),
@@ -51,15 +43,11 @@ export class PaymentRepository {
           };
           const { result, statusCode } =
             await this.squareClient.paymentsApi.createPayment(payload);
-          console.log('🚀 ~ PaymentRepository ~ statusCode:', statusCode);
-          console.log('🚀 ~ PaymentRepository ~ result:', result);
         } catch (exception) {
           if (exception instanceof ApiError) {
-            console.log('Square error instance');
             this.logger.error(exception.errors);
             bail(exception);
           } else {
-            console.log('General Error');
             this.logger.error(
               `Error creating payment on attempt ${attempt}: ${exception}`,
             );
