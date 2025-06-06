@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AppConfigModule } from 'src/configs';
 import { SampleModule } from './modules/sample/sample.module';
 import { PaymentModule } from './modules/payment/payment.module';
+import { EnvironmentModule } from 'src/configs/environment.module';
 
 @Module({
-  imports: [AppConfigModule, SampleModule, PaymentModule],
+  imports: [EnvironmentModule, SampleModule, PaymentModule],
   controllers: [],
   providers: [],
 })
