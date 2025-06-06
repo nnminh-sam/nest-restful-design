@@ -7,17 +7,18 @@ import { GlobalValidationPipe } from './common/pipes/global-validation.pipe';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { EnvironmentService } from 'src/configs/environment.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  const appConfig = app.get(ConfigService);
+  const env = app.get(EnvironmentService);
 
   app.enableCors();
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
 
-  const apiPrefix: string = appConfig.get<string>('API_PREFIX');
+  const apiPrefix: string = env.use('API_PREFIX');
   app.setGlobalPrefix(apiPrefix);
   app.enableVersioning({
     type: VersioningType.URI,
@@ -40,9 +41,9 @@ async function bootstrap() {
     swaggerOptions: { tagsSorter: 'alpha' },
   });
 
-  const port: number = appConfig.get<number>('PORT');
-  const name: string = appConfig.get<string>('NAME');
-  const host: string = appConfig.get<string>('HOST');
+  const port: number = env.use('PORT');
+  const name: string = env.use('NAME');
+  const host: string = env.use('HOST');
 
   await app.listen(port, () => {
     const logger: Logger = new Logger(name);

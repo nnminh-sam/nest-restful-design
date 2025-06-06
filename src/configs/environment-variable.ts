@@ -1,12 +1,14 @@
+import { plainToInstance } from 'class-transformer';
 import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
   MinLength,
+  validateSync,
 } from 'class-validator';
 
-export class ApplicationConfig {
+export class EnvironmentVarialbes {
   @IsString()
   @IsOptional()
   NAME?: string = 'NestJS Application';
@@ -36,4 +38,22 @@ export class ApplicationConfig {
   @IsString()
   @IsOptional()
   REFRESH_TOKEN_EXPIRES_IN: string = '1d';
+}
+
+export type EnvKey = keyof EnvironmentVarialbes;
+
+export function validate(
+  config: Record<string, unknown>,
+): EnvironmentVarialbes {
+  const validatedConfig = plainToInstance(EnvironmentVarialbes, config, {
+    enableImplicitConversion: true,
+  });
+  const errors = validateSync(validatedConfig, {
+    skipMissingProperties: false,
+  });
+
+  if (errors.length > 0) {
+    throw new Error(errors.toString());
+  }
+  return validatedConfig;
 }
